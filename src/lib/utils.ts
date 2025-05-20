@@ -1,3 +1,6 @@
+import { clsx, type ClassValue } from 'clsx'
+import { twMerge } from 'tailwind-merge'
+
 export function generateRandomNumbers(): number[] {
   const pool = Array.from({ length: 90 }, (_, i) => i + 1)
   for (let i = pool.length - 1; i > 0; i--) {
@@ -9,4 +12,8 @@ export function generateRandomNumbers(): number[] {
 
 export function getMatchCount(draw: number[], player: number[]): number {
   return draw.filter((n) => player.includes(n)).length
+}
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs))
 }
