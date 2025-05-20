@@ -1,35 +1,53 @@
+import type { DrawPayload, Stats } from '@/types'
+
 import { draws } from '@/db/schema'
 
 import { getDb } from '@/lib/db'
 import { getOrCreateSessionId } from '@/lib/session'
 import { generateRandomNumbers, getMatchCount } from '@/lib/utils'
+import {
+  DRAW_NUMBERS_COUNT,
+  DRAWS_PER_YEAR,
+  MAX_DRAW_YEAR,
+  NUMBERS_POOL_SIZE,
+  SPEED_MAX,
+  SPEED_MIN,
+  TICKET_PRICE_HUF,
+} from '@/lib/constants'
+
+const MAX_DRAWS = DRAWS_PER_YEAR * MAX_DRAW_YEAR
 
 export async function GET(req: Request) {
-  const db = getDb()
   const { searchParams } = new URL(req.url)
-  const speed = Math.max(
-    10,
-    Math.min(1000, parseInt(searchParams.get('speed') || '200', 10)),
-  )
-  const raw = searchParams.get('playerNumbers')
-  const fixedNumbers = raw
-    ?.split(',')
-    .map(Number)
-    .filter((n) => !isNaN(n) && n >= 1 && n <= 90)
-  const playerNumbers =
-    fixedNumbers?.length === 5
-      ? [...new Set(fixedNumbers)].sort((a, b) => a - b)
-      : generateRandomNumbers()
-
+  const db = getDb()
   const sessionId = await getOrCreateSessionId()
   const encoder = new TextEncoder()
+
+  const speed = Math.min(
+    SPEED_MAX,
+    Math.max(SPEED_MIN, parseInt(searchParams.get('speed') || '200', 10)),
+  )
+
+  const raw = searchParams.get('playerNumbers') ?? ''
+  const parsed = Array.from(
+    new Set(
+      raw
+        .split(',')
+        .map((n) => parseInt(n, 10))
+        .filter((n) => n >= 1 && n <= NUMBERS_POOL_SIZE),
+    ),
+  )
+  const playerNumbers =
+    parsed.length === DRAW_NUMBERS_COUNT
+      ? parsed.sort((a, b) => a - b)
+      : generateRandomNumbers()
+
   const stream = new ReadableStream({
     async start(controller) {
-      const winStats = { 2: 0, 3: 0, 4: 0, 5: 0 } as Record<number, number>
-      let i = 0
+      const winStats: Stats['wins'] = { 2: 0, 3: 0, 4: 0, 5: 0 }
       let jackpot = false
 
-      while (i < 26000 && !jackpot) {
+      for (let i = 0; i < MAX_DRAWS && !jackpot; i++) {
         const drawNumbers = generateRandomNumbers()
         const matchCount = getMatchCount(drawNumbers, playerNumbers)
 
@@ -41,24 +59,26 @@ export async function GET(req: Request) {
             matchCount,
           })
 
-          if (matchCount <= 5) winStats[matchCount]++
-          if (matchCount === 5) jackpot = true
+          if (matchCount <= DRAW_NUMBERS_COUNT) winStats[matchCount]++
+          if (matchCount === DRAW_NUMBERS_COUNT) jackpot = true
         }
 
-        const payload = JSON.stringify({
+        const payload = {
           draw: drawNumbers,
           matchCount,
           drawIndex: i + 1,
-          years: Math.floor((i + 1) / 52),
-          cost: (i + 1) * 300,
+          years: Math.floor((i + 1) / DRAWS_PER_YEAR),
+          cost: (i + 1) * TICKET_PRICE_HUF,
           wins: winStats,
           jackpot,
-        })
+        } satisfies DrawPayload
 
-        controller.enqueue(encoder.encode(`data: ${payload}\n\n`))
-        await new Promise((res) => setTimeout(res, speed))
-        i++
+        controller.enqueue(
+          encoder.encode(`data: ${JSON.stringify(payload)}\n\n`),
+        )
+        await new Promise((r) => setTimeout(r, speed))
       }
+
       controller.close()
     },
   })
