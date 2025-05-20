@@ -7,7 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "db:generate": "npx drizzle-kit generate",
+    "db:push": "npx drizzle-kit push --config=drizzle.config.ts"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.0.0",
@@ -25,6 +27,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "babel-plugin-react-compiler": "^19.1.0-rc.2",
+    "drizzle-kit": "^0.31.1",
     "eslint": "^9",
     "eslint-config-next": "15.3.2",
     "prettier": "^3.5.3",
