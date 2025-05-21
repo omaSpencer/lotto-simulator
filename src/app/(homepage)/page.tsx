@@ -9,6 +9,7 @@ import type {
 } from '@/types'
 
 import { MAX_DRAWS } from '@/lib/constants'
+import { convertUiSpeedToDelay } from '@/lib/utils'
 
 import { Header } from '@/components/Header'
 import { SimulationStats } from '@/components/SimulationStats'
@@ -31,7 +32,7 @@ export default function Home() {
   const [currentDraw, setCurrentDraw] = useState<SimulationResultDraw>({
     winningNumbers: [] as number[],
     playerNumbers: [0, 0, 0, 0, 0] as number[],
-    speed: 500,
+    speed: 0,
     isRandom: false,
   })
   const [isRunning, setIsRunning] = useState(false)
@@ -54,7 +55,8 @@ export default function Home() {
       numbersParam = playerNumbers?.join(',')
     }
 
-    const url = `/api/simulate/stream?speed=${speed}${numbersParam ? `&playerNumbers=${numbersParam}` : ''}`
+    const delay = convertUiSpeedToDelay(speed)
+    const url = `/api/simulate/stream?speed=${delay}${numbersParam ? `&playerNumbers=${numbersParam}` : ''}`
     const es = new EventSource(url)
 
     es.onopen = () => {

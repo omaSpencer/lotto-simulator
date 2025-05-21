@@ -1,6 +1,8 @@
 import { clsx, type ClassValue } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 
+import { SPEED_MS_MAX, SPEED_MS_MIN, SPEED_UI_MAX } from '@/lib/constants'
+
 function getRandomInt(min: number, max: number): number {
   const range = max - min
   if (range <= 0) return min
@@ -52,4 +54,9 @@ export function formatNumber(
     ...options,
   }).format(num)
   return formattedNum
+}
+
+export function convertUiSpeedToDelay(value: number): number {
+  const ratio = value / SPEED_UI_MAX
+  return Math.round(SPEED_MS_MAX - (SPEED_MS_MAX - SPEED_MS_MIN) * ratio)
 }

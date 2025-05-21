@@ -87,11 +87,11 @@ export const DrawPanel = ({
           <label>Speed</label>
           <Slider
             value={[speed]}
-            min={10}
-            max={1000}
+            min={0}
+            max={100}
+            step={1}
             onValueChange={onValueChange}
             disabled={isRunning}
-            step={10}
           />
         </div>
 
