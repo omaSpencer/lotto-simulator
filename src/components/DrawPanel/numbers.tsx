@@ -72,13 +72,13 @@ export function DrawPanelNumbers({
             onClick={onShuffleNumbers}
             className="h-7 w-7 md:w-9 md:h-9 rounded-full bg-primary/70 text-white flex items-center justify-center cursor-pointer group hover:bg-primary transition-colors duration-200 shadow-float"
           >
-            <DicesIcon className="size-4 md:size-5 group-hover:animate-bounce duration-300" />
+            <DicesIcon className="size-4 md:size-5 group-hover:animate-shake duration-300" />
           </button>
           <button
             onClick={onResetNumbers}
             className="h-7 w-7 md:w-9 md:h-9 rounded-full bg-red-400 text-white flex items-center justify-center cursor-pointer hover:bg-red-500 transition-colors duration-200 shadow-float group"
           >
-            <RefreshCwIcon className="size-4 md:size-5 group-hover:animate-spin duration-500" />
+            <RefreshCwIcon className="size-4 md:size-5 group-hover:rotate-[66deg] transition-transform duration-500" />
           </button>
         </div>
       )}
