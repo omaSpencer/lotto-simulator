@@ -37,13 +37,13 @@ export function DrawPanelNumbers({
   }
 
   return (
-    <div className="flex items-center gap-7">
-      <p className="min-w-[140px]">{title}</p>
-      <ul className="flex gap-4">
+    <div className="flex flex-wrap md:flex-nowrap items-center gap-y-2 gap-4 md:gap-7">
+      <p className="basis-full md:basis-auto md:min-w-[140px] text-xs md:font-normal font-semibold md:text-base">{title}</p>
+      <ul className="flex gap-3 md:gap-4">
         {numbers.map((number, idx) => (
           <li
             key={`${number}-${idx}`}
-            className={cn("relative border border-primary shadow-float py-1.5 px-3 min-w-[45px] text-center rounded-[10px]", !isRunning && "cursor-pointer")}
+            className={cn("relative border border-primary shadow-float md:text-base text-xs py-1.25 md:py-1.5 md:px-3 min-w-[26px] md:min-w-[45px] text-center rounded-[10px]", !isRunning && "cursor-pointer")}
             onClick={onHandleDropdown(idx)}
           >
             <span>{number}</span>
@@ -53,8 +53,8 @@ export function DrawPanelNumbers({
                 <li
                   key={num}
                   className={cn(
-                    'py-1 px-2 transition-colors duration-300 cursor-pointer hover:bg-primary/80 hover:text-white',
-                    numIdx % 2 === 0 ? 'bg-neutral-50' : 'bg-neutral-100',
+                    'p-1 md:px-2 transition-colors duration-300 cursor-pointer hover:bg-primary/80 hover:text-white',
+                    numIdx % 2 === 0 ? 'bg-white' : 'bg-neutral-100',
                   )}
                   onClick={onHandlePickNumber(num, idx)}
                 >
@@ -67,18 +67,18 @@ export function DrawPanelNumbers({
       </ul>
 
       {isEditable && !isRunning && (
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1.5 md:gap-2">
           <button
             onClick={onShuffleNumbers}
-            className="w-9 h-9 rounded-full bg-primary/70 text-white flex items-center justify-center cursor-pointer group hover:bg-primary transition-colors duration-200 shadow-float"
+            className="h-7 w-7 md:w-9 md:h-9 rounded-full bg-primary/70 text-white flex items-center justify-center cursor-pointer group hover:bg-primary transition-colors duration-200 shadow-float"
           >
-            <DicesIcon className="size-5 group-hover:animate-bounce duration-300" />
+            <DicesIcon className="size-4 md:size-5 group-hover:animate-bounce duration-300" />
           </button>
           <button
             onClick={onResetNumbers}
-            className="w-9 h-9 rounded-full bg-red-400 text-white flex items-center justify-center cursor-pointer hover:bg-red-500 transition-colors duration-200 shadow-float group"
+            className="h-7 w-7 md:w-9 md:h-9 rounded-full bg-red-400 text-white flex items-center justify-center cursor-pointer hover:bg-red-500 transition-colors duration-200 shadow-float group"
           >
-            <RefreshCwIcon className="size-5 group-hover:animate-spin duration-500" />
+            <RefreshCwIcon className="size-4 md:size-5 group-hover:animate-spin duration-500" />
           </button>
         </div>
       )}

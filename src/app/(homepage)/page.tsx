@@ -115,7 +115,7 @@ export default function Home() {
     <main>
       <Header />
 
-      <section className="bg-white max-w-[792px] mx-auto rounded-3xl mt-12 py-12 px-[78px] shadow-float grid gap-8">
+      <section className="bg-white max-w-[calc(100vw_-_40px)] lg:max-w-[792px] mx-auto lg:rounded-3xl mt-6 lg:mt-12 py-4 lg:py-12 px-4 lg:px-[78px] shadow-float grid gap-6 lg:gap-8">
         <DrawPanelHeader isRunning={isRunning} timestamps={timestamps} />
 
         <SimulationStats {...resultStats} />

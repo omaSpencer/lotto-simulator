@@ -4,7 +4,9 @@ import './globals.css'
 
 const nunito = Nunito({
   variable: '--font-nunito',
+  weight: ["400", "500", "600", "700", "800"],
   subsets: ['latin'],
+  display: 'swap',
 })
 
 const geistMono = Geist_Mono({

@@ -89,3 +89,13 @@ h6 {
     display: none; /* Safari and Chrome */
   }
 }
+
+.title-fSize {
+  font-size: clamp(20px, 2vw, 40px);
+  line-height: 1.15;
+}
+
+.subTitle-fSize {
+  font-size: clamp(32px, 2vw, 50px);
+  line-height: 1;
+}

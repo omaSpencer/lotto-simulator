@@ -19,7 +19,7 @@ export const DrawPanelHeader = ({
 
   return (
     <header className="flex items-center justify-between gap-5">
-      <h2 className="font-bold text-[40px] leading-[46px] text-foreground">
+      <h2 className="font-bold subTitle-fSize leading-[1] text-foreground">
         Result
       </h2>
 

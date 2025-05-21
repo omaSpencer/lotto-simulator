@@ -47,8 +47,8 @@ export const DrawPanel = ({
   }
 
   return (
-    <article className="space-y-6">
-      <div className="space-y-6">
+    <article className="space-y-3 md:space-y-6">
+      <div className="space-y-3 md:space-y-6">
         {isRunning && (
           <DrawPanelNumbers title="Winning numbers:" numbers={winningNumbers} />
         )}
@@ -70,8 +70,8 @@ export const DrawPanel = ({
       </div>
 
       <div className="space-y-4">
-        <div className="flex items-center gap-[57px]">
-          <label>Play with random numbers:</label>
+        <div className="flex items-center gap-6 md:gap-[57px]">
+          <label className='md:min-w-[140px] text-xs md:font-normal font-semibold md:text-base'>Play with random numbers:</label>
           <Checkbox
             name="isRandom"
             checked={isRandom}
@@ -84,7 +84,7 @@ export const DrawPanel = ({
         </div>
 
         <div className="flex flex-col gap-4">
-          <label>Speed</label>
+          <label className='md:min-w-[140px] text-xs md:font-normal font-semibold md:text-base'>Speed</label>
           <Slider
             value={[speed]}
             min={0}
@@ -95,7 +95,7 @@ export const DrawPanel = ({
           />
         </div>
 
-        <div className="pt-2 flex items-center gap-4 justify-between">
+        <div className="pt-2 flex flex-col sm:flex-row items-center gap-4 justify-between">
           <DrawPanelBtn disabled={isRunning} onClick={onStartSimulation}>
             <PlayCircleIcon className="size-5" />
             <span>Start simulation</span>
