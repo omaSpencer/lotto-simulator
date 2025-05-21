@@ -2,82 +2,130 @@
 
 import { useState, useRef } from 'react'
 
-import type { Stats } from '@/types'
+import type {
+  SimulationResult,
+  SimulationResultDraw,
+  SimulationResultStats,
+} from '@/types'
 
-import SimulationStats from '@/components/SimulationStats'
-import NumberBalls from '@/components/NumberBalls'
-import SpeedSlider from '@/components/SpeedSlider'
-import NumberPicker from '@/components/NumberPicker'
+import { MAX_DRAWS } from '@/lib/constants'
+
+import { Header } from '@/components/Header'
+import { SimulationStats } from '@/components/SimulationStats'
+import { DrawPanel } from '@/components/DrawPanel'
+import { DrawPanelHeader } from '@/components/DrawPanel/header'
 
 export default function Home() {
-  const [draw, setDraw] = useState<number[]>([])
-  const [matchCount, setMatchCount] = useState(0)
-  const [stats, setStats] = useState<Stats | null>(null)
+  const [resultStats, setResultStats] = useState<SimulationResultStats>({
+    numOfTickets: 0,
+    yearsSpent: 0,
+    costOfTickets: 0,
+    winMatches: {
+      2: 0,
+      3: 0,
+      4: 0,
+      5: 0,
+    },
+    matchCount: 0,
+  })
+  const [currentDraw, setCurrentDraw] = useState<SimulationResultDraw>({
+    winningNumbers: [] as number[],
+    playerNumbers: [0, 0, 0, 0, 0] as number[],
+    speed: 500,
+    isRandom: false,
+  })
   const [isRunning, setIsRunning] = useState(false)
-  const [speed, setSpeed] = useState(100)
-  const [fixedNumbers, setFixedNumbers] = useState<number[] | null>(null)
+  const [timestamps, setTimestamps] = useState({
+    start: null as Date | null,
+    end: null as Date | null,
+  })
+
   const eventSourceRef = useRef<EventSource | null>(null)
 
-  const startSimulation = () => {
-    const numbersParam = fixedNumbers?.join(',')
+  const onStartSimulation = () => {
+    const { speed, playerNumbers, isRandom } = currentDraw
+
+    let numbersParam: string | boolean = false
+
+    if (!isRandom && playerNumbers.some((n) => n === 0)) {
+      alert('Please select 5 numbers or check the random options') //! create a toast or alert UI
+      return
+    } else {
+      numbersParam = playerNumbers?.join(',')
+    }
+
     const url = `/api/simulate/stream?speed=${speed}${numbersParam ? `&playerNumbers=${numbersParam}` : ''}`
     const es = new EventSource(url)
 
+    es.onopen = () => {
+      setTimestamps((prev) => ({ ...prev, start: new Date() }))
+    }
+    es.onerror = (event) => {
+      console.error('EventSource failed:', event)
+      setTimestamps((prev) => ({ ...prev, end: new Date() }))
+      setIsRunning(false)
+      es.close()
+    }
+
     es.onmessage = (event) => {
-      const data = JSON.parse(event.data)
-      setDraw(data.draw)
-      setMatchCount(data.matchCount)
-      setStats({
-        cost: data.cost,
-        years: data.years,
-        wins: data.wins,
-        index: data.drawIndex,
-      })
-      if (data.jackpot || data.drawIndex >= 26000) {
-        stopSimulation()
+      const data: SimulationResult = JSON.parse(event.data)
+      setCurrentDraw((prev) => ({
+        ...prev,
+        winningNumbers: data.winningNumbers,
+        playerNumbers: data.playerNumbers,
+        isRandom: data.isRandom,
+      }))
+      setResultStats((prev) => ({
+        ...prev,
+        numOfTickets: data.numOfTickets,
+        yearsSpent: data.yearsSpent,
+        costOfTickets: data.costOfTickets,
+        winMatches: {
+          2: data.winMatches[2],
+          3: data.winMatches[3],
+          4: data.winMatches[4],
+          5: data.winMatches[5],
+        },
+        matchCount: data.matchCount,
+      }))
+
+      if (data.jackpot || data.numOfTickets >= MAX_DRAWS) {
+        onStopSimulation()
       }
+
+      setTimestamps((prev) => ({
+        ...prev,
+        end: new Date(),
+      }))
     }
 
     eventSourceRef.current = es
     setIsRunning(true)
   }
 
-  const stopSimulation = () => {
+  const onStopSimulation = () => {
     eventSourceRef.current?.close()
     setIsRunning(false)
+    setTimestamps((prev) => ({ ...prev, end: new Date() }))
   }
 
   return (
-    <main className="max-w-2xl mx-auto p-4 space-y-6">
-      <h1 className="text-3xl font-bold">Lotto Simulator</h1>
-      <SpeedSlider speed={speed} setSpeed={setSpeed} disabled={isRunning} />
-      <NumberPicker
-        selected={fixedNumbers}
-        setSelected={setFixedNumbers}
-        disabled={isRunning}
-      />
-      <div className="flex gap-4">
-        <button
-          onClick={startSimulation}
-          disabled={isRunning}
-          className="bg-green-600 text-white px-4 py-2 rounded"
-        >
-          Start
-        </button>
-        <button
-          onClick={stopSimulation}
-          disabled={!isRunning}
-          className="bg-red-600 text-white px-4 py-2 rounded"
-        >
-          Stop
-        </button>
-      </div>
-      <NumberBalls
-        numbers={draw}
-        hits={matchCount}
-        playerNumbers={fixedNumbers}
-      />
-      {stats && <SimulationStats {...stats} />}
+    <main>
+      <Header />
+
+      <section className="bg-white max-w-[792px] mx-auto rounded-3xl mt-12 py-12 px-[78px] shadow-float grid gap-8">
+        <DrawPanelHeader isRunning={isRunning} timestamps={timestamps} />
+
+        <SimulationStats {...resultStats} />
+
+        <DrawPanel
+          {...currentDraw}
+          isRunning={isRunning}
+          onStartSimulation={onStartSimulation}
+          onStopSimulation={onStopSimulation}
+          setState={setCurrentDraw}
+        />
+      </section>
     </main>
   )
 }

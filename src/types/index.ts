@@ -1,16 +1,19 @@
-export type Stats = {
-  cost: number
-  years: number
-  wins: Record<number, number>
-  index: number
+export type SimulationResult = SimulationResultStats &
+  SimulationResultDraw & {
+    jackpot: boolean
+  }
+
+export type SimulationResultStats = {
+  numOfTickets: number
+  yearsSpent: number
+  costOfTickets: number
+  winMatches: Record<number, number>
+  matchCount: number
 }
 
-export type DrawPayload = {
-  draw: number[]
-  matchCount: number
-  drawIndex: number
-  years: number
-  cost: number
-  wins: Stats['wins']
-  jackpot: boolean
+export type SimulationResultDraw = {
+  winningNumbers: number[]
+  playerNumbers: number[]
+  speed: number
+  isRandom: boolean
 }

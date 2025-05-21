@@ -1,4 +1,4 @@
-import type { DrawPayload, Stats } from '@/types'
+import type { SimulationResult } from '@/types'
 
 import { draws } from '@/db/schema'
 
@@ -8,14 +8,12 @@ import { generateRandomNumbers, getMatchCount } from '@/lib/utils'
 import {
   DRAW_NUMBERS_COUNT,
   DRAWS_PER_YEAR,
-  MAX_DRAW_YEAR,
+  MAX_DRAWS,
   NUMBERS_POOL_SIZE,
   SPEED_MAX,
   SPEED_MIN,
   TICKET_PRICE_HUF,
 } from '@/lib/constants'
-
-const MAX_DRAWS = DRAWS_PER_YEAR * MAX_DRAW_YEAR
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url)
@@ -44,7 +42,7 @@ export async function GET(req: Request) {
 
   const stream = new ReadableStream({
     async start(controller) {
-      const winStats: Stats['wins'] = { 2: 0, 3: 0, 4: 0, 5: 0 }
+      const winStats: Record<number, number> = { 2: 0, 3: 0, 4: 0, 5: 0 }
       let jackpot = false
 
       for (let i = 0; i < MAX_DRAWS && !jackpot; i++) {
@@ -63,18 +61,21 @@ export async function GET(req: Request) {
           if (matchCount === DRAW_NUMBERS_COUNT) jackpot = true
         }
 
-        const payload = {
-          draw: drawNumbers,
+        const result = {
+          numOfTickets: i + 1,
+          yearsSpent: Math.floor((i + 1) / DRAWS_PER_YEAR),
+          costOfTickets: (i + 1) * TICKET_PRICE_HUF,
+          winMatches: winStats,
           matchCount,
-          drawIndex: i + 1,
-          years: Math.floor((i + 1) / DRAWS_PER_YEAR),
-          cost: (i + 1) * TICKET_PRICE_HUF,
-          wins: winStats,
+          winningNumbers: drawNumbers,
+          playerNumbers,
+          speed,
+          isRandom: playerNumbers.length !== DRAW_NUMBERS_COUNT,
           jackpot,
-        } satisfies DrawPayload
+        } satisfies SimulationResult
 
         controller.enqueue(
-          encoder.encode(`data: ${JSON.stringify(payload)}\n\n`),
+          encoder.encode(`data: ${JSON.stringify(result)}\n\n`),
         )
         await new Promise((r) => setTimeout(r, speed))
       }

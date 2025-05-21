@@ -1,21 +1,65 @@
-import { Stats } from '@/types'
+'use client'
 
-export default function SimulationStats({ cost, years, wins, index }: Stats) {
+import { cn, formatNumber } from '@/lib/utils'
+
+type Props = {
+  numOfTickets: number
+  yearsSpent: number
+  costOfTickets: number
+  winMatches: Record<number, number>
+}
+
+export const SimulationStats = ({
+  numOfTickets,
+  yearsSpent,
+  costOfTickets,
+  winMatches,
+}: Props) => {
   return (
-    <div className="bg-gray-100 p-4 rounded-md text-gray-900">
-      <p>
-        <strong>Draws:</strong> {index}
-      </p>
-      <p>
-        <strong>Years Passed:</strong> {years}
-      </p>
-      <p>
-        <strong>Total Cost:</strong> {cost.toLocaleString()} HUF
-      </p>
-      <p>
-        <strong>Wins:</strong> 2 hit: {wins[2]} | 3 hit: {wins[3]} | 4 hit:{' '}
-        {wins[4]} | 5 hit: {wins[5]}
-      </p>
-    </div>
+    <>
+      <div className="bg-primary text-white rounded-[10px] py-4 px-6 font-bold gap-1.5 inline-flex flex-col w-fit">
+        <p className="flex items-center gap-6">
+          <span className="min-w-[142px]">Number of tickets:</span>
+          <span className="font-[800]">
+            {formatNumber(numOfTickets, {
+              notation: 'standard',
+              useGrouping: true,
+            })}
+          </span>
+        </p>
+        <p className="flex items-center gap-6 text-sm">
+          <span className="min-w-[142px]">Years spent:</span>
+          <span>{yearsSpent}</span>
+        </p>
+        <p className="flex items-center gap-6 text-sm">
+          <span className="min-w-[142px]">Cost of tickets:</span>
+          <span>
+            {formatNumber(costOfTickets, {
+              notation: 'standard',
+              useGrouping: true,
+              style: 'currency',
+              currency: 'HUF',
+              currencyDisplay: 'symbol',
+            })}
+          </span>
+        </p>
+      </div>
+
+      <div className="grid grid-cols-2 md:grid-cols-4 w-fit">
+        {Object.entries(winMatches).map(([key, value], idx) => (
+          <p
+            key={key}
+            className={cn(
+              'flex flex-col justify-between items-center shadow-float border border-secondary p-3 font-bold gap-2.5 min-w-[127px]',
+              idx === 0 && 'rounded-l-[10px]',
+              idx === Object.keys(winMatches).length - 1 && 'rounded-r-[10px]',
+            )}
+          >
+            <span className="text-xs">{key} matches</span>
+            <span className="font-[800]">{value}</span>
+          </p>
+        ))}
+      </div>
+    </>
   )
 }
