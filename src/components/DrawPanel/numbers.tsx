@@ -43,7 +43,7 @@ export function DrawPanelNumbers({
         {numbers.map((number, idx) => (
           <li
             key={`${number}-${idx}`}
-            className={cn("relative border border-primary shadow-float md:text-base text-xs py-1.25 md:py-1.5 md:px-3 min-w-[26px] md:min-w-[45px] text-center rounded-[10px]", !isRunning && "cursor-pointer")}
+            className={cn("relative border border-primary shadow-float md:text-base text-xs py-1.25 md:py-1.5 md:px-3 min-w-[26px] md:min-w-[36px] text-center rounded-[10px]", !isRunning && "cursor-pointer")}
             onClick={onHandleDropdown(idx)}
           >
             <span>{number}</span>

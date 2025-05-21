@@ -17,7 +17,7 @@ export const SimulationStats = ({
 }: Props) => {
   return (
     <>
-      <div className="bg-primary text-white rounded-[10px] p-3 md:py-4 md:px-6 font-bold gap-1.5 inline-flex flex-col w-full sm:w-fit">
+      <div className="bg-primary text-white rounded-[10px] p-3 md:py-4 md:px-6 font-bold gap-1.5 inline-flex flex-col w-full sm:w-fit sm:min-w-[325px]">
         <p className="flex items-center gap-6 text-sm lg:text-base">
           <span className="min-w-[142px]">Number of tickets:</span>
           <span className="font-[800]">
