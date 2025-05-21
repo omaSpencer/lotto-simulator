@@ -48,7 +48,7 @@ export function DrawPanelNumbers({
           >
             <span>{number}</span>
 
-            <ul className={cn("absolute z-10 top-[calc(100%_+_0.25rem)] left-0 w-full bg-white rounded-[10px] shadow-float max-h-[180px] overflow-y-auto hide-scrollbar opacity-0 transition-opacity duration-200 invisible", open[idx] && 'opacity-100 visible')}>
+            <ul className={cn("absolute z-10 bottom-[calc(100%_+_0.25rem)] md:bottom-[unset] md:top-[calc(100%_+_0.25rem)] left-0 w-full bg-white rounded-[10px] shadow-float max-h-[180px] overflow-y-auto hide-scrollbar opacity-0 transition-opacity duration-200 invisible", open[idx] && 'opacity-100 visible')}>
               {getNonSelectedNumbers(numbers).map((num, numIdx) => (
                 <li
                   key={num}
