@@ -15,6 +15,7 @@ import { Header } from '@/components/Header'
 import { SimulationStats } from '@/components/SimulationStats'
 import { DrawPanel } from '@/components/DrawPanel'
 import { DrawPanelHeader } from '@/components/DrawPanel/header'
+import { Confetti } from '@/components/Confetti'
 
 export default function Home() {
   const [resultStats, setResultStats] = useState<SimulationResultStats>({
@@ -40,6 +41,7 @@ export default function Home() {
     start: null as Date | null,
     end: null as Date | null,
   })
+  const [isJackpot, setIsJackpot] = useState(false)
 
   const eventSourceRef = useRef<EventSource | null>(null)
 
@@ -92,6 +94,7 @@ export default function Home() {
       }))
 
       if (data.jackpot || data.numOfTickets >= MAX_DRAWS) {
+        setIsJackpot(data.jackpot)
         onStopSimulation()
       }
 
@@ -128,6 +131,8 @@ export default function Home() {
           setState={setCurrentDraw}
         />
       </section>
+
+      {isJackpot && <Confetti onRestart={() => setIsJackpot(false)} />}
     </main>
   )
 }
