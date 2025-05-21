@@ -1,36 +1,100 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+🎯 Lotto Simulator
 
-## Getting Started
+A full-stack lottery simulation app built with Next.js App Router, TypeScript, and Drizzle ORM. Simulates the “Fictional Five” (5/90) draw game with live statistics and jackpot logic.
 
-First, run the development server:
+⸻
+
+🚀 Tech Stack
+• Frontend: Next.js App Router, React, TypeScript, Tailwind CSS
+• Backend: API Routes with Server-Sent Events (SSE)
+• ORM: Drizzle ORM + NeonDB (PostgreSQL)
+
+⸻
+
+🧪 Features
+• 5/90 lottery draw simulation
+• Fixed or random player numbers
+• Adjustable simulation speed (10ms–1000ms)
+• Jackpot logic (simulation stops after win or 500 years)
+• Real-time stats: ticket count, cost, years, hit distribution
+• Session-based game state with cookie support
+
+⸻
+
+📦 Project Setup
+
+# Install dependencies
+
+```bash
+npm install
+```
+
+# Create .env file
+
+Example .env
+
+```bash
+DATABASE_URL="postgresql://..."
+```
+
+Drizzle DB setup
+
+```bash
+npm run db:push # Push schema to DB
+```
+
+Dev server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+⸻
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+🗃️ Scripts
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```json
+"scripts": {
+  "dev": "next dev",
+  "build": "next build",
+  "start": "next start",
+  "db:push": "drizzle-kit push",
+  "db:migrate": "drizzle-kit migrate"
+}
+```
 
-## Learn More
+⸻
 
-To learn more about Next.js, take a look at the following resources:
+🌍 Deployment
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+This project is deployable to Vercel or Railway.
+• Note: SSE (event-stream) has a 60s timeout on Vercel Free tier.
+• Recommended for long simulations: self-host or Railway.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+[Demo 1](https://lotto-simulator-production.up.railway.app/) | [Demo 2](https://lotto-simulator-kappa.vercel.app/)
+⸻
 
-## Deploy on Vercel
+📁 Project structure (simplified)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```bash
+/lotto-simulator
+├── src/
+│   ├── app/
+│   │   └── api/     → draw, simulate/stream, stats
+│   ├── components/  → UI components (Slider, Picker, Stats)
+│   ├── lib/         → utils, db, session
+│   └── types/       → SimulationResult
+├── drizzle/         → schema.ts
+├── public/          → favicon, assets
+└── .env.local       → NeonDB connection string
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+⸻
+
+📜 License
+
+MIT
+
+⸻
+
+Made with ❤️ for the Fictional Numbers Lottery Inc. (NASDAQ: FNLI)
