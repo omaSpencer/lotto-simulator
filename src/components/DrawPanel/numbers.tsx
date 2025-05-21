@@ -1,9 +1,15 @@
 'use client'
 
 import { DicesIcon, RefreshCwIcon } from 'lucide-react'
-import { useState } from 'react'
 
 import { cn, getNonSelectedNumbers } from '@/lib/utils'
+
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+} from '@/components/Select'
 
 export function DrawPanelNumbers({
   title,
@@ -22,46 +28,39 @@ export function DrawPanelNumbers({
   onResetNumbers?: () => void
   onPickNumber?: (picked: number, index: number) => void
 }) {
-  const [open, setOpen] = useState(
-    numbers.flatMap(() => [false])
-  )
-
-  const onHandlePickNumber = (num: number, index: number) => () => {
-    if (isRunning) return
-    onPickNumber?.(num, index)
-  }
-
-  const onHandleDropdown = (index: number) => () => {
-    if (isRunning) return
-    setOpen((prev) => prev.map((isOpen, i) => i === index ? !isOpen : false))
+  const onHandlePickNumber = (index: number) => (value: string) => {
+    if (isRunning || !isEditable) return
+    onPickNumber?.(Number(value), index)
   }
 
   return (
     <div className="flex flex-wrap md:flex-nowrap items-center gap-y-2 gap-4 md:gap-7">
-      <p className="basis-full md:basis-auto md:min-w-[140px] text-xs md:font-normal font-semibold md:text-base">{title}</p>
+      <p className="basis-full md:basis-auto md:min-w-[140px] text-xs md:font-normal font-semibold md:text-base">
+        {title}
+      </p>
       <ul className="flex gap-3 md:gap-4">
         {numbers.map((number, idx) => (
           <li
             key={`${number}-${idx}`}
-            className={cn("relative border border-primary shadow-float md:text-base text-xs py-1.25 md:py-1.5 md:px-3 min-w-[26px] md:min-w-[36px] text-center rounded-[10px]", !isRunning && "cursor-pointer")}
-            onClick={onHandleDropdown(idx)}
+            className={cn(
+              'relative border border-primary shadow-float md:text-base text-xs py-1.25 md:py-1.5 w-[26px] md:w-[36px] text-center rounded-[10px]',
+              !isRunning && isEditable && 'cursor-pointer',
+            )}
           >
-            <span>{number}</span>
-
-            <ul className={cn("absolute z-10 bottom-[calc(100%_+_0.25rem)] md:bottom-[unset] md:top-[calc(100%_+_0.25rem)] left-0 w-full bg-white rounded-[10px] shadow-float max-h-[180px] overflow-y-auto hide-scrollbar opacity-0 transition-opacity duration-200 invisible", open[idx] && 'opacity-100 visible')}>
-              {getNonSelectedNumbers(numbers).map((num, numIdx) => (
-                <li
-                  key={num}
-                  className={cn(
-                    'p-1 md:px-2 transition-colors duration-300 cursor-pointer hover:bg-primary/80 hover:text-white',
-                    numIdx % 2 === 0 ? 'bg-white' : 'bg-neutral-100',
-                  )}
-                  onClick={onHandlePickNumber(num, idx)}
-                >
-                  {num}
-                </li>
-              ))}
-            </ul>
+            <Select
+              value={String(number)}
+              onValueChange={onHandlePickNumber(idx)}
+              disabled={isRunning || !isEditable}
+            >
+              <SelectTrigger className="w-full">{number}</SelectTrigger>
+              <SelectContent>
+                {getNonSelectedNumbers(numbers).map((num) => (
+                  <SelectItem key={num} value={String(num)}>
+                    {num}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </li>
         ))}
       </ul>

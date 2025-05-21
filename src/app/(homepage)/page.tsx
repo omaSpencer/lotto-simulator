@@ -31,7 +31,7 @@ export default function Home() {
     matchCount: 0,
   })
   const [currentDraw, setCurrentDraw] = useState<SimulationResultDraw>({
-    winningNumbers: [] as number[],
+    winningNumbers: [0, 0, 0, 0, 0] as number[],
     playerNumbers: [0, 0, 0, 0, 0] as number[],
     speed: 0,
     isRandom: false,

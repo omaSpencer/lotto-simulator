@@ -43,15 +43,14 @@ export const DrawPanel = ({
     setState((prev) => ({
       ...prev,
       playerNumbers: shuffledPlayerNumbers,
+      isRandom: false,
     }))
   }
 
   return (
     <article className="space-y-3 md:space-y-6">
       <div className="space-y-3 md:space-y-6">
-        {isRunning && (
-          <DrawPanelNumbers title="Winning numbers:" numbers={winningNumbers} />
-        )}
+        <DrawPanelNumbers title="Winning numbers:" numbers={winningNumbers} />
         <DrawPanelNumbers
           title="Your numbers:"
           numbers={playerNumbers}
@@ -71,20 +70,28 @@ export const DrawPanel = ({
 
       <div className="space-y-4">
         <div className="flex items-center gap-6 md:gap-[57px]">
-          <label className='md:min-w-[140px] text-xs md:font-normal font-semibold md:text-base'>Play with random numbers:</label>
+          <label className="md:min-w-[140px] text-xs md:font-normal font-semibold md:text-base">
+            Play with random numbers:
+          </label>
           <Checkbox
             name="isRandom"
             checked={isRandom}
-            onCheckedChange={(checked) =>
-              setState((prev) => ({ ...prev, isRandom: checked as boolean }))
-            }
+            onCheckedChange={(checked) => {
+              setState((prev) => ({
+                ...prev,
+                isRandom: checked as boolean,
+                playerNumbers: checked ? [0, 0, 0, 0, 0] : prev.playerNumbers,
+              }))
+            }}
             className="shadow-float"
             disabled={isRunning}
           />
         </div>
 
         <div className="flex flex-col gap-4">
-          <label className='md:min-w-[140px] text-xs md:font-normal font-semibold md:text-base'>Speed</label>
+          <label className="md:min-w-[140px] text-xs md:font-normal font-semibold md:text-base">
+            Speed
+          </label>
           <Slider
             value={[speed]}
             min={0}

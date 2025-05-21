@@ -52,7 +52,8 @@ export const SimulationStats = ({
             className={cn(
               'flex flex-col justify-between items-center shadow-float border border-secondary p-3 font-bold gap-2.5 min-w-[127px]',
               idx === 0 && 'sm:rounded-l-[10px]',
-              idx === Object.keys(winMatches).length - 1 && 'sm:rounded-r-[10px]',
+              idx === Object.keys(winMatches).length - 1 &&
+                'sm:rounded-r-[10px]',
               idx === 0 && 'max-sm:rounded-tl-[10px]',
               idx === 1 && 'max-sm:rounded-tr-[10px]',
               idx === 2 && 'max-sm:rounded-bl-[10px]',
