@@ -8,9 +8,9 @@
   "author": "Zoltan Busi",
   "scripts": {
     "build:server": "tsc -p tsconfig.server.json",
-    "dev": "node server.js",
+    "dev": "node dist/server.js",
     "build": "next build",
-    "start": "NODE_ENV=production node server.js",
+    "start": "NODE_ENV=production node dist/server.js",
     "lint": "next lint",
     "format": "prettier --write \"**/*.{ts,tsx,css}\"",
     "db:generate": "npx drizzle-kit generate",
@@ -50,5 +50,6 @@
     "prettier": "^3.5.3",
     "tailwindcss": "^4",
     "typescript": "^5"
-  }
+  },
+  "main": "dist/server.js"
 }
