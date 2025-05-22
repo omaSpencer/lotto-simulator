@@ -14,7 +14,8 @@
     "lint": "next lint",
     "format": "prettier --write \"**/*.{ts,tsx,css}\"",
     "db:generate": "npx drizzle-kit generate",
-    "db:push": "npx drizzle-kit push --config=drizzle.config.ts"
+    "db:push": "npx drizzle-kit push --config=drizzle.config.ts",
+    "test": "vitest"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.0.0",
@@ -49,7 +50,8 @@
     "eslint-config-next": "15.3.2",
     "prettier": "^3.5.3",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vitest": "^3.1.4"
   },
   "main": "dist/server.js"
 }
