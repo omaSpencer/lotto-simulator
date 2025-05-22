@@ -55,11 +55,15 @@ npm run dev
 
 ```json
 "scripts": {
-  "dev": "next dev",
+  "build:server": "tsc -p tsconfig.server.json",
+  "dev": "node dist/server.js",
   "build": "next build",
-  "start": "next start",
-  "db:push": "drizzle-kit push",
-  "db:migrate": "drizzle-kit migrate"
+  "start": "NODE_ENV=production node dist/server.js",
+  "lint": "next lint",
+  "format": "prettier --write \"**/*.{ts,tsx,css}\"",
+  "db:generate": "npx drizzle-kit generate",
+  "db:push": "npx drizzle-kit push --config=drizzle.config.ts",
+  "test": "vitest"
 }
 ```
 
