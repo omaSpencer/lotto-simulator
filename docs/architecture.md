@@ -18,16 +18,17 @@
 
 ## ⚙️ Technologies Used
 
-| Layer      | Technology                      |
-| ---------- | ------------------------------- |
-| Frontend   | React (App Router), Tailwind    |
-| UI Layer   | shadcn/ui, SpeedSlider, Picker  |
-| API Layer  | Next.js API Routes (Edge-ready) |
-| Streaming  | Server-Sent Events (SSE)        |
-| DB Access  | Drizzle ORM                     |
-| DB Engine  | NeonDB (PostgreSQL)             |
-| Sessions   | HTTP Cookie + SessionId         |
-| Randomness | `crypto.randomInt()` (Node)     |
+| Layer      | Technology                        |
+| ---------- | --------------------------------- |
+| Frontend   | React (App Router), Tailwind      |
+| UI Layer   | DrawPanel, SimulationStats, etc.  |
+| API Layer  | Next.js API Routes (Edge-ready)   |
+| Streaming  | Server-Sent Events (SSE)          |
+| WebSocket  | Socket.io (WS)                    |
+| DB Access  | Drizzle ORM                       |
+| DB Engine  | NeonDB (PostgreSQL)               |
+| Sessions   | HTTP Cookie + SessionId           |
+| Randomness | `crypto.getRandomValues()` (Node) |
 
 ---
 
