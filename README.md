@@ -80,12 +80,13 @@ This project is deployable to Railway.
 ├── src/
 │   ├── app/
 │   │   └── api/     → draw, simulate/stream, stats
-│   ├── components/  → UI components (Slider, Picker, Stats)
-│   ├── lib/         → utils, db, session
+│   ├── components/  → UI components (DrawPanel, SimulationStats, Slider etc.)
+│   ├── lib/         → utils, db, session, socket, constants
 │   └── types/       → SimulationResult
 ├── drizzle/         → schema.ts
 ├── public/          → favicon, assets
-└── .env.local       → NeonDB connection string
+├── docs/            → architecture, screenshots
+└── .env             → NeonDB connection string
 ```
 
 ⸻
