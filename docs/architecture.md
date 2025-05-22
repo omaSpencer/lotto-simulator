@@ -50,6 +50,14 @@
 
   - Returns statistics for current session
 
+- `src/app/(SSE)/page.tsx`
+
+  - SSE version page
+
+- `/src/app/(WS)/ws/page.tsx`
+
+  - WS version page
+
 - `/lib/utils.ts`
 
   - Random number generation, match logic
@@ -119,4 +127,9 @@ interface SimulationResult {
 
 ## 📊 Diagram Preview
 
-_A visual architecture diagram will follow below._
+![architecture](architecture.png)
+
+## 🖼️ Screenshots
+
+![desktop](desktop.png)
+![mobile](mobile.png)
