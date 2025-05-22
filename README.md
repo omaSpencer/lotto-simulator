@@ -6,7 +6,7 @@ A full-stack lottery simulation app built with Next.js App Router, TypeScript, a
 
 🚀 Tech Stack
 • Frontend: Next.js App Router, React, TypeScript, Tailwind CSS
-• Backend: API Routes with Server-Sent Events (SSE)
+• Backend: API Routes with Server-Sent Events (SSE) or WebSocket (socket.io)
 • ORM: Drizzle ORM + NeonDB (PostgreSQL)
 
 ⸻
@@ -67,11 +67,10 @@ npm run dev
 
 🌍 Deployment
 
-This project is deployable to Vercel or Railway.
-• Note: SSE (event-stream) has a 60s timeout on Vercel Free tier.
-• Recommended for long simulations: self-host or Railway.
+This project is deployable to Railway.
 
-[Demo 1](https://lotto-simulator-production.up.railway.app/) | [Demo 2](https://lotto-simulator-kappa.vercel.app/)
+[Demo 1](https://lotto-simulator-production.up.railway.app/)
+
 ⸻
 
 📁 Project structure (simplified)

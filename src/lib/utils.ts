@@ -1,7 +1,7 @@
 import { clsx, type ClassValue } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 
-import { SPEED_MS_MAX, SPEED_MS_MIN, SPEED_UI_MAX } from '@/lib/constants'
+import { SPEED_MS_MAX, SPEED_MS_MIN, SPEED_UI_MAX } from './constants'
 
 function getRandomInt(min: number, max: number): number {
   const range = max - min

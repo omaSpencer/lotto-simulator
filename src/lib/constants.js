@@ -1,0 +1,12 @@
+export const TICKET_PRICE_HUF = 300;
+export const DRAWS_PER_YEAR = 52;
+export const SPEED_MIN = 10;
+export const SPEED_MAX = 1000;
+export const NUMBERS_POOL_SIZE = 90;
+export const DRAW_NUMBERS_COUNT = 5;
+export const MAX_DRAW_YEAR = 500;
+export const MAX_DRAWS = DRAWS_PER_YEAR * MAX_DRAW_YEAR;
+export const SPEED_UI_MIN = 0;
+export const SPEED_UI_MAX = 100;
+export const SPEED_MS_MIN = 10;
+export const SPEED_MS_MAX = 1000;

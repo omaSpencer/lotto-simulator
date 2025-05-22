@@ -33,6 +33,11 @@
 
 ## 📦 Core Modules
 
+- `server.js`
+
+  - The Socket.IO server can share the same underlying HTTP server with Next.js
+  - A custom server cannot be deployed on Vercel
+
 - `/src/app/api/draw/route.ts`
 
   - Handles one-off draw requests

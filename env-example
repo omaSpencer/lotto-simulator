@@ -1,1 +1,3 @@
 DATABASE_URL="postgresql://user:pass@ep-project-db.neon.tech/db"
+HOSTNAME="localhost"
+PORT="3000"
