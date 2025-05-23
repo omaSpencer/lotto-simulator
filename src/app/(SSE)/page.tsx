@@ -1,47 +1,32 @@
 'use client'
 
-import { useState, useRef } from 'react'
+import { useRef } from 'react'
 
-import type {
-  SimulationResult,
-  SimulationResultDraw,
-  SimulationResultStats,
-} from '@/types'
+import type { SimulationResult } from '@/types'
+
+import { useSimulationState } from '@/hooks/useSimulationState'
 
 import { MAX_DRAWS } from '@/lib/constants'
 import { convertUiSpeedToDelay } from '@/lib/utils'
 
-import { Header } from '@/components/Header'
 import { SimulationStats } from '@/components/SimulationStats'
 import { DrawPanel } from '@/components/DrawPanel'
 import { DrawPanelHeader } from '@/components/DrawPanel/header'
 import { Confetti } from '@/components/Confetti'
 
-export default function Home() {
-  const [resultStats, setResultStats] = useState<SimulationResultStats>({
-    numOfTickets: 0,
-    yearsSpent: 0,
-    costOfTickets: 0,
-    winMatches: {
-      2: 0,
-      3: 0,
-      4: 0,
-      5: 0,
-    },
-    matchCount: 0,
-  })
-  const [currentDraw, setCurrentDraw] = useState<SimulationResultDraw>({
-    winningNumbers: [0, 0, 0, 0, 0] as number[],
-    playerNumbers: [0, 0, 0, 0, 0] as number[],
-    speed: 0,
-    isRandom: false,
-  })
-  const [isRunning, setIsRunning] = useState(false)
-  const [timestamps, setTimestamps] = useState({
-    start: null as Date | null,
-    end: null as Date | null,
-  })
-  const [isJackpot, setIsJackpot] = useState(false)
+export default function ServerSentEventsPage() {
+  const {
+    currentDraw,
+    resultStats,
+    timestamps,
+    isJackpot,
+    isRunning,
+    setCurrentDraw,
+    setIsJackpot,
+    setIsRunning,
+    setResultStats,
+    setTimestamps,
+  } = useSimulationState()
 
   const eventSourceRef = useRef<EventSource | null>(null)
 
@@ -114,10 +99,12 @@ export default function Home() {
     setTimestamps((prev) => ({ ...prev, end: new Date() }))
   }
 
-  return (
-    <main className="pb-6 lg:pb-12">
-      <Header />
+  const onValueChange = (value: number[]) => {
+    setCurrentDraw((prev) => ({ ...prev, speed: value[0] }))
+  }
 
+  return (
+    <>
       <section className="bg-white max-w-[calc(100vw_-_40px)] lg:max-w-[792px] mx-auto lg:rounded-3xl mt-6 lg:mt-12 py-4 lg:py-12 px-4 lg:px-[78px] shadow-float grid gap-6 lg:gap-8">
         <DrawPanelHeader isRunning={isRunning} timestamps={timestamps} />
 
@@ -126,13 +113,14 @@ export default function Home() {
         <DrawPanel
           {...currentDraw}
           isRunning={isRunning}
+          sliderDisabled={isRunning}
           onStartSimulation={onStartSimulation}
           onStopSimulation={onStopSimulation}
           setState={setCurrentDraw}
+          onValueChange={onValueChange}
         />
       </section>
-
       {isJackpot && <Confetti onRestart={() => setIsJackpot(false)} />}
-    </main>
+    </>
   )
 }

@@ -2,6 +2,8 @@ import type { Metadata } from 'next'
 import { Geist_Mono, Nunito } from 'next/font/google'
 import './globals.css'
 
+import { Header } from '@/components/Header'
+
 const nunito = Nunito({
   variable: '--font-nunito',
   weight: ['400', '500', '600', '700', '800'],
@@ -32,7 +34,11 @@ export default function RootLayout({
       </head>
 
       <body className={`${nunito.variable} ${geistMono.variable} antialiased`}>
-        {children}
+        <main className="pb-6 lg:pb-12">
+          <Header />
+
+          {children}
+        </main>
       </body>
     </html>
   )

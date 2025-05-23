@@ -52,6 +52,7 @@ app.prepare().then(() => {
         const drawNumbers = generateRandomNumbers()
         const matchCount = getMatchCount(drawNumbers, playerNumbers)
         drawCount++
+        const jackpot = matchCount === DRAW_NUMBERS_COUNT
         if (matchCount >= 2 && matchCount <= DRAW_NUMBERS_COUNT)
           winStats[matchCount]++
         const result = {
@@ -64,10 +65,12 @@ app.prepare().then(() => {
           playerNumbers,
           speed,
           isRandom: playerNumbers.length !== DRAW_NUMBERS_COUNT,
-          jackpot: matchCount === DRAW_NUMBERS_COUNT,
+          jackpot,
         }
+
         socket.emit('draw-tick', result)
-        if (matchCount === DRAW_NUMBERS_COUNT) break
+
+        if (jackpot) break
         await new Promise((r) => setTimeout(r, speed))
       }
       isRunning = false

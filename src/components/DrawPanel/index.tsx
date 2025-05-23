@@ -19,8 +19,10 @@ export type DrawPanelProps = {
   isRandom: boolean
   speed: number
   isRunning: boolean
+  sliderDisabled: boolean
   onStartSimulation: () => void
   onStopSimulation: () => void
+  onValueChange: (value: number[]) => void
   setState: Dispatch<SetStateAction<SimulationResultDraw>>
 }
 
@@ -30,14 +32,12 @@ export const DrawPanel = ({
   speed,
   isRandom,
   isRunning,
+  sliderDisabled,
   onStartSimulation,
   onStopSimulation,
+  onValueChange,
   setState,
 }: DrawPanelProps) => {
-  const onValueChange = (value: number[]) => {
-    setState((prev) => ({ ...prev, speed: value[0] }))
-  }
-
   const onShuffleNumbers = () => {
     const shuffledPlayerNumbers = generateRandomNumbers()
     setState((prev) => ({
@@ -98,7 +98,7 @@ export const DrawPanel = ({
             max={100}
             step={1}
             onValueChange={onValueChange}
-            disabled={isRunning}
+            disabled={sliderDisabled}
           />
         </div>
 

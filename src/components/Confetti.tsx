@@ -15,7 +15,7 @@ export const Confetti = ({ onRestart }: { onRestart: () => void }) => {
           className="text-primary bg-white rounded-sm px-4 py-2 min-h-10 min-w-[180px] font-bold"
           onClick={onRestart}
         >
-          Play Again
+          Restart
         </button>
       </div>
     </section>
