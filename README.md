@@ -63,7 +63,8 @@ npm run dev
   "format": "prettier --write \"**/*.{ts,tsx,css}\"",
   "db:generate": "npx drizzle-kit generate",
   "db:push": "npx drizzle-kit push --config=drizzle.config.ts",
-  "test": "vitest"
+  "test": "vitest",
+  "test:e2e": "npx cypress open"
 }
 ```
 
