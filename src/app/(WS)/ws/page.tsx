@@ -112,7 +112,15 @@ export default function WebSocketPage() {
 
   const onSpeedChange = (value: number[]) => {
     const speed = value[0]
-    socket.emit('set-speed', speed)
+
+    if (isRunning) {
+      socket.emit('set-speed', speed)
+    } else {
+      setCurrentDraw((prev) => ({
+        ...prev,
+        speed,
+      }))
+    }
   }
 
   return (
