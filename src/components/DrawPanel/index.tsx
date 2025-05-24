@@ -12,6 +12,7 @@ import { Slider } from '@/components/Slider'
 
 import { DrawPanelNumbers } from './numbers'
 import { DrawPanelBtn } from './btn'
+import { DrawPanelAlert } from './alert'
 
 export type DrawPanelProps = {
   winningNumbers: number[]
@@ -67,6 +68,8 @@ export const DrawPanel = ({
           isRunning={isRunning}
         />
       </div>
+
+      <DrawPanelAlert />
 
       <div className="space-y-4">
         <div className="flex items-center gap-6 md:gap-[57px]">

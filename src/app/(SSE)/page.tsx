@@ -8,6 +8,8 @@ import { useSimulationState } from '@/hooks/useSimulationState'
 
 import { MAX_DRAWS } from '@/lib/constants'
 import { convertUiSpeedToDelay } from '@/lib/utils'
+import { useAppStore } from '@/lib/store'
+import { AlertType } from '@/lib/enums'
 
 import { SimulationStats } from '@/components/SimulationStats'
 import { DrawPanel } from '@/components/DrawPanel'
@@ -27,6 +29,7 @@ export default function ServerSentEventsPage() {
     setResultStats,
     setTimestamps,
   } = useSimulationState()
+  const setAlert = useAppStore((state) => state.setAlert)
 
   const eventSourceRef = useRef<EventSource | null>(null)
 
@@ -36,7 +39,11 @@ export default function ServerSentEventsPage() {
     let numbersParam: string | boolean = false
 
     if (!isRandom && playerNumbers.some((n) => n === 0)) {
-      alert('Please select 5 numbers or check the random options') //! create a toast or alert UI
+      setAlert({
+        title: 'Required field',
+        message: 'Please select 5 numbers or check the random options',
+        type: AlertType.WARNING,
+      })
       return
     } else {
       numbersParam = playerNumbers?.join(',')
@@ -47,7 +54,9 @@ export default function ServerSentEventsPage() {
     const es = new EventSource(url)
 
     es.onopen = () => {
-      setTimestamps((prev) => ({ ...prev, start: new Date() }))
+      setTimestamps((prev) => ({ ...prev, start: new Date(), end: new Date() }))
+      setIsRunning(true)
+      setAlert(null)
     }
     es.onerror = (event) => {
       console.error('EventSource failed:', event)
@@ -62,7 +71,6 @@ export default function ServerSentEventsPage() {
         ...prev,
         winningNumbers: data.winningNumbers,
         playerNumbers: data.playerNumbers,
-        isRandom: data.isRandom,
       }))
       setResultStats((prev) => ({
         ...prev,
@@ -83,14 +91,15 @@ export default function ServerSentEventsPage() {
         onStopSimulation()
       }
 
-      setTimestamps((prev) => ({
-        ...prev,
-        end: new Date(),
-      }))
+      if (data.numOfTickets % 60 === 0) {
+        setTimestamps((prev) => ({
+          ...prev,
+          end: new Date(),
+        }))
+      }
     }
 
     eventSourceRef.current = es
-    setIsRunning(true)
   }
 
   const onStopSimulation = () => {

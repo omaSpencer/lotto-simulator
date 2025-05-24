@@ -9,6 +9,8 @@ import { useSimulationState } from '@/hooks/useSimulationState'
 import { socket } from '@/lib/socket'
 import { MAX_DRAWS } from '@/lib/constants'
 import { convertDelayToUiSpeed, generateRandomNumbers } from '@/lib/utils'
+import { useAppStore } from '@/lib/store'
+import { AlertType } from '@/lib/enums'
 
 import { DrawPanelHeader } from '@/components/DrawPanel/header'
 import { SimulationStats } from '@/components/SimulationStats'
@@ -28,6 +30,7 @@ export default function WebSocketPage() {
     setResultStats,
     setTimestamps,
   } = useSimulationState()
+  const setAlert = useAppStore((state) => state.setAlert)
 
   useEffect(() => {
     function onTick(data: SimulationResult) {
@@ -35,7 +38,6 @@ export default function WebSocketPage() {
         ...prev,
         winningNumbers: data.winningNumbers,
         playerNumbers: data.playerNumbers,
-        isRandom: data.isRandom,
         speed: convertDelayToUiSpeed(data.speed),
       }))
       setResultStats((prev) => ({
@@ -52,16 +54,16 @@ export default function WebSocketPage() {
         matchCount: data.matchCount,
       }))
 
+      if (data.jackpot || data.numOfTickets >= MAX_DRAWS) {
+        setIsJackpot(data.jackpot)
+        onStopSimulation()
+      }
+
       if (data.numOfTickets % 60 === 0) {
         setTimestamps((prev) => ({
           ...prev,
           end: new Date(),
         }))
-      }
-
-      if (data.jackpot || data.numOfTickets >= MAX_DRAWS) {
-        setIsJackpot(data.jackpot)
-        onStopSimulation()
       }
     }
 
@@ -78,7 +80,11 @@ export default function WebSocketPage() {
     let _playedNumbers: number[] = []
 
     if (!isRandom && playerNumbers.some((n) => n === 0)) {
-      alert('Please select 5 numbers or check the random options') //! create a toast or alert UI
+      setAlert({
+        title: 'Required field',
+        message: 'Please select 5 numbers or check the random options',
+        type: AlertType.WARNING,
+      })
       return
     }
 
@@ -95,6 +101,7 @@ export default function WebSocketPage() {
 
     setTimestamps((prev) => ({ ...prev, start: new Date(), end: new Date() }))
     setIsRunning(true)
+    setAlert(null)
   }
 
   const onStopSimulation = () => {
@@ -105,7 +112,6 @@ export default function WebSocketPage() {
 
   const onSpeedChange = (value: number[]) => {
     const speed = value[0]
-    setCurrentDraw((prev) => ({ ...prev, speed }))
     socket.emit('set-speed', speed)
   }
 
