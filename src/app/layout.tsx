@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { Geist_Mono, Nunito } from 'next/font/google'
+import { Suspense } from 'react'
 import './globals.css'
 
 import { Header } from '@/components/Header'
@@ -37,7 +38,7 @@ export default function RootLayout({
         <main className="pb-6 lg:pb-12">
           <Header />
 
-          {children}
+          <Suspense>{children}</Suspense>
         </main>
       </body>
     </html>
