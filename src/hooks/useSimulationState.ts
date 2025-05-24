@@ -1,8 +1,12 @@
 import { useState } from 'react'
+import { useSearchParams } from 'next/navigation'
 
 import type { SimulationResultDraw, SimulationResultStats } from '@/types'
 
 export function useSimulationState() {
+  const searchParams = useSearchParams()
+  const speedFromUrl = parseInt(searchParams.get('speed') ?? '0')
+
   const [resultStats, setResultStats] = useState<SimulationResultStats>({
     numOfTickets: 0,
     yearsSpent: 0,
@@ -14,7 +18,7 @@ export function useSimulationState() {
   const [currentDraw, setCurrentDraw] = useState<SimulationResultDraw>({
     winningNumbers: [0, 0, 0, 0, 0],
     playerNumbers: [0, 0, 0, 0, 0],
-    speed: 0,
+    speed: speedFromUrl,
     isRandom: false,
   })
 

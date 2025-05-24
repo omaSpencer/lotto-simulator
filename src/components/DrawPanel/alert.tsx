@@ -29,7 +29,7 @@ export const DrawPanelAlert = () => {
   if (alert === null) return null
 
   return (
-    <Alert variant={variant}>
+    <Alert variant={variant} data-cy="draw-panel-alert">
       <AlertCircle className="h-4 w-4" />
       <AlertTitle>{alert.title}</AlertTitle>
       <AlertDescription>{alert.message}</AlertDescription>

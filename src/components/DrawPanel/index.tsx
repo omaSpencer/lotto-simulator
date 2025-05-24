@@ -48,24 +48,41 @@ export const DrawPanel = ({
     }))
   }
 
+  const onPickNumber = (picked: number, index: number) => {
+    const newPlayerNumbers = [...playerNumbers]
+    newPlayerNumbers[index] = picked
+    setState((prev) => ({ ...prev, playerNumbers: newPlayerNumbers }))
+  }
+
+  const onResetNumbers = () =>
+    setState((prev) => ({ ...prev, playerNumbers: [0, 0, 0, 0, 0] }))
+
+  const onCheckedChange = (checked: boolean) => {
+    setState((prev) => ({
+      ...prev,
+      isRandom: checked as boolean,
+      playerNumbers: checked ? [0, 0, 0, 0, 0] : prev.playerNumbers,
+    }))
+  }
+
   return (
     <article className="space-y-3 md:space-y-6">
       <div className="space-y-3 md:space-y-6">
-        <DrawPanelNumbers title="Winning numbers:" numbers={winningNumbers} />
+        <DrawPanelNumbers
+          title="Winning numbers:"
+          numbers={winningNumbers}
+          data-cy="draw-panel-winning-numbers"
+        />
         <DrawPanelNumbers
           title="Your numbers:"
           numbers={playerNumbers}
           onShuffleNumbers={onShuffleNumbers}
-          onResetNumbers={() =>
-            setState((prev) => ({ ...prev, playerNumbers: [0, 0, 0, 0, 0] }))
-          }
-          onPickNumber={(picked, index) => {
-            const newPlayerNumbers = [...playerNumbers]
-            newPlayerNumbers[index] = picked
-            setState((prev) => ({ ...prev, playerNumbers: newPlayerNumbers }))
-          }}
+          onResetNumbers={onResetNumbers}
+          onPickNumber={onPickNumber}
           isEditable
           isRunning={isRunning}
+          variant="player"
+          data-cy="draw-panel-player-numbers"
         />
       </div>
 
@@ -79,15 +96,10 @@ export const DrawPanel = ({
           <Checkbox
             name="isRandom"
             checked={isRandom}
-            onCheckedChange={(checked) => {
-              setState((prev) => ({
-                ...prev,
-                isRandom: checked as boolean,
-                playerNumbers: checked ? [0, 0, 0, 0, 0] : prev.playerNumbers,
-              }))
-            }}
+            onCheckedChange={onCheckedChange}
             className="shadow-float"
             disabled={isRunning}
+            data-cy="draw-panel-checkbox-random-numbers"
           />
         </div>
 
@@ -106,7 +118,11 @@ export const DrawPanel = ({
         </div>
 
         <div className="pt-2 flex flex-col sm:flex-row items-center gap-4 justify-between">
-          <DrawPanelBtn disabled={isRunning} onClick={onStartSimulation}>
+          <DrawPanelBtn
+            disabled={isRunning}
+            onClick={onStartSimulation}
+            data-cy="draw-panel-btn-start"
+          >
             <PlayCircleIcon className="size-5" />
             <span>Start simulation</span>
           </DrawPanelBtn>
@@ -115,6 +131,7 @@ export const DrawPanel = ({
             className="bg-red-400"
             onClick={onStopSimulation}
             disabled={!isRunning}
+            data-cy="draw-panel-btn-stop"
           >
             <StopCircleIcon className="size-5" />
             <span>Stop simulation</span>

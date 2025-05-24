@@ -18,7 +18,10 @@ export const DrawPanelHeader = ({
   }, [timestamps])
 
   return (
-    <header className="flex items-center justify-between gap-5">
+    <header
+      className="flex items-center justify-between gap-5"
+      data-cy="draw-panel-header"
+    >
       <h2 className="font-bold subTitle-fSize leading-[1] text-foreground">
         Result
       </h2>
@@ -32,7 +35,7 @@ export const DrawPanelHeader = ({
                 isRunning && 'animate-spin duration-1000',
               )}
             />
-            <span>{timer}</span>
+            <span data-cy="draw-panel-header-timer">{timer}</span>
           </time>
         </div>
       )}

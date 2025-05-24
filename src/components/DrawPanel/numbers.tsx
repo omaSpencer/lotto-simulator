@@ -14,6 +14,7 @@ import {
 export function DrawPanelNumbers({
   title,
   numbers,
+  variant = 'winning',
   isEditable = false,
   isRunning,
   onShuffleNumbers,
@@ -24,6 +25,7 @@ export function DrawPanelNumbers({
   numbers: number[]
   isRunning?: boolean
   isEditable?: boolean
+  variant?: 'winning' | 'player'
   onShuffleNumbers?: () => void
   onResetNumbers?: () => void
   onPickNumber?: (picked: number, index: number) => void
@@ -52,10 +54,19 @@ export function DrawPanelNumbers({
               onValueChange={onHandlePickNumber(idx)}
               disabled={isRunning || !isEditable}
             >
-              <SelectTrigger className="w-full">{number}</SelectTrigger>
+              <SelectTrigger
+                className="w-full"
+                data-cy={`draw-panel-${variant}-number-select-trigger-${idx}`}
+              >
+                {number}
+              </SelectTrigger>
               <SelectContent>
                 {getNonSelectedNumbers(numbers).map((num) => (
-                  <SelectItem key={num} value={String(num)}>
+                  <SelectItem
+                    key={num}
+                    value={String(num)}
+                    data-cy={`draw-panel-${variant}-number-select-item-${num}`}
+                  >
                     {num}
                   </SelectItem>
                 ))}
@@ -70,12 +81,14 @@ export function DrawPanelNumbers({
           <button
             onClick={onShuffleNumbers}
             className="h-7 w-7 md:w-9 md:h-9 rounded-full bg-primary/70 text-white flex items-center justify-center cursor-pointer group hover:bg-primary transition-colors duration-200 shadow-float"
+            data-cy="shuffle-numbers-button"
           >
             <DicesIcon className="size-4 md:size-5 group-hover:animate-shake duration-300" />
           </button>
           <button
             onClick={onResetNumbers}
             className="h-7 w-7 md:w-9 md:h-9 rounded-full bg-red-400 text-white flex items-center justify-center cursor-pointer hover:bg-red-500 transition-colors duration-200 shadow-float group"
+            data-cy="reset-numbers-button"
           >
             <RefreshCwIcon className="size-4 md:size-5 group-hover:rotate-[66deg] transition-transform duration-500" />
           </button>
