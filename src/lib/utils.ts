@@ -60,3 +60,8 @@ export function convertUiSpeedToDelay(value: number): number {
   const ratio = value / SPEED_UI_MAX
   return Math.round(SPEED_MS_MAX - (SPEED_MS_MAX - SPEED_MS_MIN) * ratio)
 }
+
+export function convertDelayToUiSpeed(delay: number): number {
+  const ratio = (SPEED_MS_MAX - delay) / (SPEED_MS_MAX - SPEED_MS_MIN)
+  return Math.round(ratio * SPEED_UI_MAX)
+}

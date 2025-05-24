@@ -8,7 +8,7 @@ import { useSimulationState } from '@/hooks/useSimulationState'
 
 import { socket } from '@/lib/socket'
 import { MAX_DRAWS } from '@/lib/constants'
-import { generateRandomNumbers } from '@/lib/utils'
+import { convertDelayToUiSpeed, generateRandomNumbers } from '@/lib/utils'
 
 import { DrawPanelHeader } from '@/components/DrawPanel/header'
 import { SimulationStats } from '@/components/SimulationStats'
@@ -36,6 +36,7 @@ export default function WebSocketPage() {
         winningNumbers: data.winningNumbers,
         playerNumbers: data.playerNumbers,
         isRandom: data.isRandom,
+        speed: convertDelayToUiSpeed(data.speed),
       }))
       setResultStats((prev) => ({
         ...prev,
@@ -103,8 +104,9 @@ export default function WebSocketPage() {
   }
 
   const onSpeedChange = (value: number[]) => {
-    setCurrentDraw((prev) => ({ ...prev, speed: value[0] }))
-    socket.emit('set-speed', value[0])
+    const speed = value[0]
+    setCurrentDraw((prev) => ({ ...prev, speed }))
+    socket.emit('set-speed', speed)
   }
 
   return (

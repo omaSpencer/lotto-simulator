@@ -1,7 +1,11 @@
 import { createServer } from 'node:http'
 import next from 'next'
 import { Server } from 'socket.io'
-import { generateRandomNumbers, getMatchCount } from './src/lib/utils.js'
+import {
+  convertUiSpeedToDelay,
+  generateRandomNumbers,
+  getMatchCount,
+} from './src/lib/utils.js'
 import {
   DRAW_NUMBERS_COUNT,
   DRAWS_PER_YEAR,
@@ -19,32 +23,30 @@ app.prepare().then(() => {
     cors: { origin: '*' },
   })
   io.on('connection', (socket) => {
-    console.log('[WS] Connected:', socket.id)
-    let speed = 200
+    let speed = 0
     let isRunning = false
     let drawCount = 0
     let winStats = { 2: 0, 3: 0, 4: 0, 5: 0 }
     let playerNumbers = generateRandomNumbers()
     socket.on('start-simulation', (data) => {
-      console.log('[WS] Start simulation')
       if (
         Array.isArray(data?.playerNumbers) &&
         data.playerNumbers.length === DRAW_NUMBERS_COUNT
       ) {
         playerNumbers = data.playerNumbers
       }
-      speed = data?.speed || 200
+      const delay = convertUiSpeedToDelay(data?.speed || 0)
+      speed = delay
       drawCount = 0
       isRunning = true
       winStats = { 2: 0, 3: 0, 4: 0, 5: 0 }
       loop()
     })
     socket.on('set-speed', (newSpeed) => {
-      console.log('[WS] New speed:', newSpeed)
-      speed = Math.max(10, Math.min(1000, Number(newSpeed)))
+      const delay = convertUiSpeedToDelay(newSpeed)
+      speed = delay
     })
     socket.on('stop', () => {
-      console.log('[WS] Stop requested')
       isRunning = false
     })
     const loop = async () => {
@@ -67,9 +69,7 @@ app.prepare().then(() => {
           isRandom: playerNumbers.length !== DRAW_NUMBERS_COUNT,
           jackpot,
         }
-
         socket.emit('draw-tick', result)
-
         if (jackpot) break
         await new Promise((r) => setTimeout(r, speed))
       }
