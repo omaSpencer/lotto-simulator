@@ -1,17 +1,19 @@
-🎯 Lotto Simulator
+# 🎯 Lotto Simulator
 
 A full-stack lottery simulation app built with Next.js App Router, TypeScript, and Drizzle ORM. Simulates the “Fictional Five” (5/90) draw game with live statistics and jackpot logic.
 
 ⸻
 
-🚀 Tech Stack
+### 🚀 Tech Stack
+
 • Frontend: Next.js App Router, React, TypeScript, Tailwind CSS
 • Backend: API Routes with Server-Sent Events (SSE) or WebSocket (socket.io)
 • ORM: Drizzle ORM + NeonDB (PostgreSQL)
 
 ⸻
 
-🧪 Features
+### 🧪 Features
+
 • 5/90 lottery draw simulation
 • Fixed or random player numbers
 • Adjustable simulation speed (10ms–1000ms)
@@ -21,7 +23,7 @@ A full-stack lottery simulation app built with Next.js App Router, TypeScript, a
 
 ⸻
 
-📦 Project Setup
+# 📦 Project Setup
 
 # Install dependencies
 
@@ -51,7 +53,7 @@ npm run dev
 
 ⸻
 
-🗃️ Scripts
+# 🗃️ Scripts
 
 ```json
 "scripts": {
@@ -70,7 +72,7 @@ npm run dev
 
 ⸻
 
-🌍 Deployment
+# 🌍 Deployment
 
 This project is deployable to Railway.
 
@@ -78,7 +80,7 @@ This project is deployable to Railway.
 
 ⸻
 
-📁 Project structure (simplified)
+# 📁 Project structure (simplified)
 
 ```bash
 /lotto-simulator
@@ -96,7 +98,24 @@ This project is deployable to Railway.
 
 ⸻
 
-📜 License
+# 🧪 Testing
+
+## Unit tests (Vitest)
+
+```bash
+npm run test        # run all unit tests
+```
+
+## E2E tests (Cypress)
+
+```bash
+npm run dev         # run dev server (http://localhost:3000)
+npm run test:e2e    # launch Cypress GUI
+```
+
+⸻
+
+## 📜 License
 
 MIT
 
